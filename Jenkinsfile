@@ -5,22 +5,23 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the code...'
-                // Simulate success or failure
-                // Uncomment the next line to test failure case
-                // error 'Failing the build to test email'
+                // Add your build steps here...
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                // Add your test steps here...
             }
         }
     }
 
     post {
         always {
-            emailext (
-                to: 'mahsanaj323@gmail.com',
-                subject: "Build Status: ${currentBuild.currentResult}",
-                body: """The Jenkins build ${env.JOB_NAME} - ${env.BUILD_NUMBER} has completed with status: ${currentBuild.currentResult}.
-                         Check the attached log for more details.""",
-                attachLog: true
-            )
+            emailext attachmentsPattern: '**/*.log', 
+                     body: '''The build has finished with status: ${currentBuild.currentResult}. Please check the attached logs for more details.''', 
+                     subject: 'Build Status: ${currentBuild.currentResult}', 
+                     to: 'mahsanaj323@gmail.com'
         }
     }
 }
