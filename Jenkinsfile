@@ -6,12 +6,14 @@ pipeline {
     }
 
     stages {
-
         stage('Build') {
             steps {
                 echo 'Stage: Build'
                 echo 'Task: Build the code using Maven'
                 echo 'Tool: Maven'
+                // Assuming build.log will be generated during the build process
+                // Use a script or command to create/build your application
+                sh 'echo "Build log content" > build.log'  // Example to generate build.log
             }
         }
 
@@ -66,30 +68,22 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully.'
-            mail(
+            emailext(
                 to: env.EMAIL_RECIPIENTS,
                 subject: "SUCCESS: Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """Good news! The pipeline for ${env.JOB_NAME} #${env.BUILD_NUMBER} completed successfully.
 
-Check the attached log file for details.""",
-                mimeType: 'text/plain',
-                attachLog: true // This will attach the console log to the email
+Check the attached build log for details.""",
+                attachmentsPattern: '**/build.log'  // Attach the build log file if available
             )
         }
         failure {
-            echo 'Pipeline failed.'
-            mail(
+            emailext(
                 to: env.EMAIL_RECIPIENTS,
                 subject: "FAILURE: Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """Unfortunately, the pipeline for ${env.JOB_NAME} #${env.BUILD_NUMBER} failed. Please check the attached log file for more details.""",
-                mimeType: 'text/plain',
-                attachLog: true // This will attach the console log to the email
+                body: """Unfortunately, the pipeline for ${env.JOB_NAME} #${env.BUILD_NUMBER} failed. Please check the attached build log for more details.""",
+                attachmentsPattern: '**/build.log'  // Attach the build log file if available
             )
-        }
-        always {
-            echo 'Pipeline completed.'
         }
     }
 }
-
