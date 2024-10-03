@@ -11,13 +11,13 @@ pipeline {
     }
 
     post {
-        always {
-            // Send email with log attachment
-            emailext to: 'mahsanaj323@gmail.com',
-                     subject: "Jenkins Pipeline Status: ${currentBuild.currentResult}",
-                     body: """The Jenkins pipeline ${env.JOB_NAME} - ${env.BUILD_NUMBER} has finished with status: ${currentBuild.currentResult}.
-                     Check the attached log for more details.""",
-                     attachLog: true
+        failure {
+            // Minimal emailext configuration
+            emailext(
+                to: 'mahsanaj323@gmail.com', // Your email
+                subject: "Jenkins Pipeline Failed",
+                body: "The Jenkins pipeline has failed. Please check the build logs for details."
+            )
         }
     }
 }
