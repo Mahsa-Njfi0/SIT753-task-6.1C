@@ -1,88 +1,103 @@
 pipeline {
     agent any
 
-    environment {
-        EMAIL_RECIPIENTS = 'mahsanaj323@gmail.com'
+    tools {
+        maven 'Maven' // Assuming you have Maven configured as 'Maven' under Jenkins -> Global Tool Configuration
+        git 'Default' // Assuming Git is installed and configured as 'Default' in Jenkins
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Stage: Build'
-                echo 'Task: Build the code using Maven'
-                echo 'Tool: Maven'
-                // Assuming build.log will be generated during the build process
-                // Use a script or command to create/build your application
-                sh 'echo "Build log content" > build.log'  // Example to generate build.log
+                script {
+                    echo 'Stage: Build'
+                    echo 'Task: Build the code using Maven'
+                    echo 'Tool: Maven'
+                    
+                    // Use Maven to build
+                    bat 'mvn clean install'
+                }
             }
         }
 
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Stage: Unit and Integration Tests'
-                echo 'Task: Run unit tests to ensure code functions as expected and run integration tests to ensure components work together.'
-                echo 'Tool: JUnit'
+                script {
+                    echo 'Running Unit and Integration Tests'
+                    bat 'mvn test'
+                }
             }
         }
 
         stage('Code Analysis') {
             steps {
-                echo 'Stage: Code Analysis'
-                echo 'Task: Perform static code analysis to ensure code meets industry standards.'
-                echo 'Tool: SonarQube'
+                script {
+                    echo 'Running Code Analysis'
+                    bat 'mvn sonar:sonar'
+                }
             }
         }
 
         stage('Security Scan') {
             steps {
-                echo 'Stage: Security Scan'
-                echo 'Task: Perform a security scan to identify vulnerabilities in the code.'
-                echo 'Tool: OWASP Dependency-Check'
+                script {
+                    echo 'Running Security Scan'
+                    bat 'mvn dependency-check:check'
+                }
             }
         }
 
         stage('Deploy to Staging') {
             steps {
-                echo 'Stage: Deploy to Staging'
-                echo 'Task: Deploy the application to a staging server.'
-                echo 'Tool: AWS CLI'
+                script {
+                    echo 'Deploying to Staging'
+                    bat 'echo "Deploying to staging server..."'
+                }
             }
         }
 
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Stage: Integration Tests on Staging'
-                echo 'Task: Run integration tests on the staging environment.'
-                echo 'Tool: Custom Test Scripts'
+                script {
+                    echo 'Running Integration Tests on Staging'
+                    bat 'echo "Running integration tests on staging server..."'
+                }
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                echo 'Stage: Deploy to Production'
-                echo 'Task: Deploy the application to a production server.'
-                echo 'Tool: AWS CLI'
+                script {
+                    echo 'Deploying to Production'
+                    bat 'echo "Deploying to production server..."'
+                }
             }
         }
     }
 
     post {
         success {
-            emailext(
-                to: env.EMAIL_RECIPIENTS,
-                subject: "SUCCESS: Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """Good news! The pipeline for ${env.JOB_NAME} #${env.BUILD_NUMBER} completed successfully.
-
-Check the attached build log for details.""",
-                attachmentsPattern: '**/build.log'  // Attach the build log file if available
+            echo 'Build succeeded! Sending email...'
+            emailext (
+                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: "Good news! Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' completed successfully. Please check the logs for details.",
+                to: "mahsanaj323@gmail.com",
+                attachLog: true
             )
         }
         failure {
-            emailext(
-                to: env.EMAIL_RECIPIENTS,
-                subject: "FAILURE: Jenkins Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """Unfortunately, the pipeline for ${env.JOB_NAME} #${env.BUILD_NUMBER} failed. Please check the attached build log for more details.""",
-                attachmentsPattern: '**/build.log'  // Attach the build log file if available
+            echo 'Build failed! Sending email...'
+            emailext (
+                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: "Unfortunately, job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed. Please check the logs for details.",
+                to: "mahsanaj323@gmail.com",
+                attachLog: true
             )
         }
     }
