@@ -46,7 +46,7 @@ pipeline {
                     emailext to: 'mahsanaj323@gmail.com',
                              subject: "Pipeline Failure: Security Scan",
                              body: "The Security Scan stage has failed. Please check the attached log file for details.",
-                             attachLog: true
+                             attachLog: true //test
                 }
             }
         }
