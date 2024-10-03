@@ -5,19 +5,19 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the code...'
-                // Simulate a failure in the build step to trigger email notification
-                error 'Simulating a build failure to test emailext'
+                error 'Simulating a failure to trigger email notification' // Intentionally failing the build
             }
         }
     }
 
     post {
-        failure {
-            emailext(
-                subject: "Pipeline Failure",
-                body: "The pipeline has failed. Please check the Jenkins logs for details.",
-                to: 'mahsanaj323@gmail.com'
-            )
+        always {
+            // Send email with log attachment
+            emailext to: 'mahsanaj323@gmail.com',
+                     subject: "Jenkins Pipeline Status: ${currentBuild.currentResult}",
+                     body: """The Jenkins pipeline ${env.JOB_NAME} - ${env.BUILD_NUMBER} has finished with status: ${currentBuild.currentResult}.
+                     Check the attached log for more details.""",
+                     attachLog: true
         }
     }
 }
