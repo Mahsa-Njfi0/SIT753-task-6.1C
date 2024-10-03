@@ -23,6 +23,7 @@ pipeline {
                     mail to: 'mahsanaj323@gmail.com',
                          subject: "Pipeline Failure: Unit and Integration Tests",
                          body: "The Unit and Integration Tests stage has failed. Please check the Jenkins logs for details."
+                        attachLog: true
                 }
             }
         }
@@ -70,5 +71,5 @@ pipeline {
         }
     }
 }
-
+//test
 
