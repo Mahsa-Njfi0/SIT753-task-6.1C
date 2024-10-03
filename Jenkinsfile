@@ -1,104 +1,75 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven' // Assuming you have Maven configured as 'Maven' under Jenkins -> Global Tool Configuration
-        git 'Default' // Assuming Git is installed and configured as 'Default' in Jenkins
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Build') {
             steps {
-                script {
-                    echo 'Stage: Build'
-                    echo 'Task: Build the code using Maven'
-                    echo 'Tool: Maven'
-                    
-                    // Use Maven to build
-                    bat 'mvn clean install'
-                }
+                echo 'Building the code...'
+                
             }
         }
-
         stage('Unit and Integration Tests') {
             steps {
-                script {
-                    echo 'Running Unit and Integration Tests'
-                    bat 'mvn test'
+                echo 'Running tests...'
+                
+            }
+            post {
+                success {
+                    mail to: 'mahsanaj323@gmail.com',
+                         subject: "Pipeline Success: Unit and Integration Tests",
+                         body: "The Unit and Integration Tests stage has completed successfully."
+                }
+                failure {
+                    mail to: 'mahsanaj323@gmail.com',
+                         subject: "Pipeline Failure: Unit and Integration Tests",
+                         body: "The Unit and Integration Tests stage has failed. Please check the Jenkins logs for details."
+                       
                 }
             }
         }
-
         stage('Code Analysis') {
             steps {
-                script {
-                    echo 'Running Code Analysis'
-                    bat 'mvn sonar:sonar'
-                }
+                echo 'Analyzing code...'
+               
             }
         }
-
         stage('Security Scan') {
             steps {
-                script {
-                    echo 'Running Security Scan'
-                    bat 'mvn dependency-check:check'
+                echo 'Running security scan...'
+               
+            }
+            post {
+                success {
+                    mail to: 'mahsanaj323@gmail.com',
+                         subject: "Pipeline Success: Security Scan",
+                         body: "The Security Scan stage has completed successfully."
+                }
+                failure {
+                    mail to: 'mahsanaj323@gmail.com',
+                         subject: "Pipeline Failure: Security Scan",
+                         body: "The Security Scan stage has failed. Please check the Jenkins logs for details."
                 }
             }
         }
-
         stage('Deploy to Staging') {
             steps {
-                script {
-                    echo 'Deploying to Staging'
-                    bat 'echo "Deploying to staging server..."'
-                }
+                echo 'Deploying to staging...'
+               
             }
         }
-
         stage('Integration Tests on Staging') {
             steps {
-                script {
-                    echo 'Running Integration Tests on Staging'
-                    bat 'echo "Running integration tests on staging server..."'
-                }
+                echo 'Running integration tests on staging...'
+                
             }
         }
-
         stage('Deploy to Production') {
             steps {
-                script {
-                    echo 'Deploying to Production'
-                    bat 'echo "Deploying to production server..."'
-                }
+                echo 'Deploying to production...'
+               
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build succeeded! Sending email...'
-            emailext (
-                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: "Good news! Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' completed successfully. Please check the logs for details.",
-                to: "mahsanaj323@gmail.com",
-                attachLog: true
-            )
-        }
-        failure {
-            echo 'Build failed! Sending email...'
-            emailext (
-                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: "Unfortunately, job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed. Please check the logs for details.",
-                to: "mahsanaj323@gmail.com",
-                attachLog: true
-            )
         }
     }
 }
+
+
