@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    tools {
+        git 'Default'  // Specify the Git tool here, the one you configured in Global Tool Configuration
+    }
     stages {
         stage('Build') {
             steps {
