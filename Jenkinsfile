@@ -55,17 +55,23 @@ pipeline {
     post {
         success {
             echo 'Pipeline completed successfully!'
-            emailext subject: 'Pipeline Success',
-                     body: 'The pipeline has succeeded!',
-                     to: 'mahsanaj323@gmail.com',
-                     attachLog: true  // Attach the log for successful build
+            emailext(
+                subject: 'Pipeline Success',
+                body: 'The pipeline has succeeded!',
+                to: 'mahsanaj323@gmail.com',
+                from: 'mahsan.njfi0@gmail.com',  // Set sender email explicitly
+                attachLog: true
+            )
         }
         failure {
             echo 'Pipeline failed!'
-            emailext subject: 'Pipeline Failed',
-                     body: 'The pipeline has failed. Please check the logs.',
-                     to: 'mahsanaj323@gmail.com',
-                     attachLog: true  // Attach the log for failed buildhiho
+            emailext(
+                subject: 'Pipeline Failed',
+                body: 'The pipeline has failed. Please check the logs.',
+                to: 'mahsanaj323@gmail.com',
+                from: 'mahsan.njfi0@gmail.com',  // Set sender email explicitly
+                attachLog: true
+            )
         }
     }
 }
