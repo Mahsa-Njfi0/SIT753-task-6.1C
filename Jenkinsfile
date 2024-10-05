@@ -65,7 +65,7 @@ pipeline {
             emailext subject: 'Pipeline Failed',
                      body: 'The pipeline has failed. Please check the logs.',
                      to: 'mahsanaj323@gmail.com',
-                     attachLog: true  // Attach the log for failed build
+                     attachLog: true  // Attach the log for failed buildhiho
         }
     }
 }
