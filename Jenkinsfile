@@ -58,7 +58,7 @@ pipeline {
                 subject: "Build ${currentBuild.fullDisplayName}",
                 body: "The build has completed. Check the attached log.",
                 to: 'mahsanaj323@gmail.com',
-                attachLog: true //f
+                attachLog: true //fss
             )
         }
     }
