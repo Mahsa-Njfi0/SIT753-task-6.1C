@@ -59,7 +59,6 @@ pipeline {
                 subject: 'Pipeline Success',
                 body: 'The pipeline has succeeded!',
                 to: 'mahsanaj323@gmail.com',
-                from: 'mahsan.njfi0@gmail.com',  // Set sender email explicitly
                 attachLog: true
             )
         }
@@ -69,7 +68,6 @@ pipeline {
                 subject: 'Pipeline Failed',
                 body: 'The pipeline has failed. Please check the logs.',
                 to: 'mahsanaj323@gmail.com',
-                from: 'mahsan.njfi0@gmail.com',  // Set sender email explicitlyjjk
                 attachLog: true
             )
         }
