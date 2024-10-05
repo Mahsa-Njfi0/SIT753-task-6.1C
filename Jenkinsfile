@@ -70,7 +70,7 @@ pipeline {
                 subject: "Build ${currentBuild.fullDisplayName} - FAILURE",
                 body: "The pipeline ${currentBuild.fullDisplayName} has failed. Please check the attached log.",
                 to: "${env.EMAIL_RECIPIENTS}",
-                attachLog: true //tse
+                attachLog: true //tseyy
             )
         }
     }
