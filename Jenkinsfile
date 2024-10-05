@@ -56,19 +56,15 @@ pipeline {
         EMAIL_RECIPIENTS = 'mahsanaj323@gmail.com'
     }
 
-    steps {
-        script {
-            currentBuild.result = 'SUCCESS'
+    post {
+        success {
             emailext(
-                subject: "Build ${currentBuild.fullDisplayName} - ${currentBuild.result}",
-                body: "The pipeline ${currentBuild.fullDisplayName} has completed with status ${currentBuild.result}.",
+                subject: "Build ${currentBuild.fullDisplayName} - SUCCESS",
+                body: "The pipeline ${currentBuild.fullDisplayName} has completed successfully.",
                 to: "${env.EMAIL_RECIPIENTS}",
                 attachLog: true
             )
         }
-    }
-
-    post {
         failure {
             emailext(
                 subject: "Build ${currentBuild.fullDisplayName} - FAILURE",
