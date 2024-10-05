@@ -1,4 +1,4 @@
-pipeline {
+pipeline { 
     agent any
 
     stages {
@@ -52,25 +52,13 @@ pipeline {
         }
     }
 
-    environment {
-        EMAIL_RECIPIENTS = 'mahsanaj323@gmail.com'
-    }
-
     post {
-        success {
+        always {
             emailext(
-                subject: "Build ${currentBuild.fullDisplayName} - SUCCESS",
-                body: "The pipeline ${currentBuild.fullDisplayName} has completed successfully.",
-                to: "${env.EMAIL_RECIPIENTS}",
+                subject: "Build ${currentBuild.fullDisplayName}",
+                body: "The build has completed. Check the attached log.",
+                to: 'mahsanaj323@gmail.com',
                 attachLog: true
-            )
-        }
-        failure {
-            emailext(
-                subject: "Build ${currentBuild.fullDisplayName} - FAILURE",
-                body: "The pipeline ${currentBuild.fullDisplayName} has failed. Please check the attached log.",
-                to: "${env.EMAIL_RECIPIENTS}",
-                attachLog: true //tsljjk
             )
         }
     }
