@@ -69,7 +69,7 @@ pipeline {
                 subject: 'Pipeline Failed',
                 body: 'The pipeline has failed. Please check the logs.',
                 to: 'mahsanaj323@gmail.com',
-                from: 'mahsan.njfi0@gmail.com',  // Set sender email explicitlyjjj
+                from: 'mahsan.njfi0@gmail.com',  // Set sender email explicitlyjjjkk
                 attachLog: true
             )
         }
